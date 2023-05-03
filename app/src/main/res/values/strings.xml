@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Practice_1</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello">Hello</string>
+    <string name="andersen">Andersen</string>
+    <string name="confirm">confirm</string>
+    <string name="enter_your_text">enter your text!</string>
+    <string name="okay">Okay!</string>
 </resources>

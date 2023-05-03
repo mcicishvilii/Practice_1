@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.FragmentHelloAndersen">
+
+
+    <ImageButton
+
+        android:id="@+id/btn_next"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:background="@color/custom_grey"
+        android:src="@drawable/baseline_arrow_forward_24" />
+
+
+    <TextView
+        android:id="@+id/tv_hello"
+        style="@style/tv_style"
+        android:text="@string/hello"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_andersen"
+        style="@style/tv_style"
+        android:text="@string/andersen"
+
+        />
+
+
+</LinearLayout>
