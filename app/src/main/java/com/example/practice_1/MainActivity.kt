@@ -8,8 +8,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.practice_1.databinding.ActivityMainBinding
 import com.example.practice_1.fragments.LessonOneFragment
-import com.example.practice_1.fragments.drawer_fragments.LessonThreeFragment
-import com.example.practice_1.fragments.drawer_fragments.LessonTwoFragment
+import com.example.practice_1.fragments.LessonThreeFragment
+import com.example.practice_1.fragments.LessonTwoFragment
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null

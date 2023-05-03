@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragmentHelloAndersen"
-        android:name="com.example.practice_1.fragments.FragmentHelloAndersen"
+        android:name="com.example.practice_1.fragments.lesson_1_fragments.FragmentHelloAndersen"
         android:label="fragment_hello_andersen"
         tools:layout="@layout/fragment_hello_andersen" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/textWatcherFragment"
-        android:name="com.example.practice_1.fragments.TextWatcherFragment"
+        android:name="com.example.practice_1.fragments.lesson_1_fragments.TextWatcherFragment"
         android:label="fragment_text_watcher"
         tools:layout="@layout/fragment_text_watcher" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.example.practice_1.fragments.ListFragment"
+        android:name="com.example.practice_1.fragments.lesson_1_fragments.ListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" />
 </navigation>

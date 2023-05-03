@@ -1,15 +1,7 @@
-package com.example.practice_1.fragments
+package com.example.practice_1.fragments.lesson_1_fragments
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
-import androidx.navigation.fragment.findNavController
-import com.example.practice_1.R
 import com.example.practice_1.common.BaseFragment
 import com.example.practice_1.databinding.FragmentTextWatcherBinding
 
