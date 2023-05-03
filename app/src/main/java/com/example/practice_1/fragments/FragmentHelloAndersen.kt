@@ -19,12 +19,6 @@ class FragmentHelloAndersen : BaseFragment<FragmentHelloAndersenBinding>(Fragmen
     }
 
     override fun listeners() {
-        goToNextFragment()
     }
 
-    private fun goToNextFragment(){
-        binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentHelloAndersen_to_textWatcherFragment)
-        }
-    }
 }

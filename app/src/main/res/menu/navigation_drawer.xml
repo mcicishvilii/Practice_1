@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_item"
+        android:title="Lessons List"/>
+            <item
+                android:id="@+id/lesson_one"
+                android:title="lesson 1"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/lesson_two"
+                android:title="lesson 2"
+                android:checkable="true"/>
+            <item
+                android:id="@+id/lesson_three"
+                android:title="lesson 3"
+                android:checkable="true">
+    </item>
+</menu>

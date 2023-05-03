@@ -7,4 +7,6 @@
     <string name="confirm">confirm</string>
     <string name="enter_your_text">enter your text!</string>
     <string name="okay">Okay!</string>
+    <string name="nav_open">open!</string>
+    <string name="nav_closed">closed!</string>
 </resources>

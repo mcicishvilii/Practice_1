@@ -21,7 +21,6 @@ class TextWatcherFragment : BaseFragment<FragmentTextWatcherBinding>(FragmentTex
 
     override fun listeners() {
         watchText()
-        goToNextFragment()
     }
 
     private fun watchText(){
@@ -33,11 +32,4 @@ class TextWatcherFragment : BaseFragment<FragmentTextWatcherBinding>(FragmentTex
             Toast.makeText(requireContext(),text,Toast.LENGTH_SHORT).show()
         }
     }
-
-    private fun goToNextFragment(){
-        binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_textWatcherFragment_to_listFragment)
-        }
-    }
-
 }

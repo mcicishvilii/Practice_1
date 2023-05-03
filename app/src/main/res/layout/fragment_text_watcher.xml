@@ -7,17 +7,6 @@
     tools:context=".fragments.TextWatcherFragment">
 
 
-    <ImageButton
-        android:id="@+id/btn_next"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="20dp"
-        android:background="@color/custom_grey"
-        android:src="@drawable/baseline_arrow_forward_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/et_editText"
         android:hint="@string/enter_your_text"
