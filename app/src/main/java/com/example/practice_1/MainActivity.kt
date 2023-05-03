@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.practice_1.databinding.ActivityMainBinding
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
                     navigate(LessonThreeFragment())
                 }
             }
+            drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
 
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+
             true
         } else super.onOptionsItemSelected(item)
     }
