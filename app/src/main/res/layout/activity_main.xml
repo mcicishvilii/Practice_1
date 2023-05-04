@@ -11,6 +11,49 @@
         android:id="@+id/flContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="#4CAF50"
+            android:text="play"
+            app:layout_constraintEnd_toStartOf="@+id/btnPause"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="#FFEB3B"
+            android:text="pause"
+            app:layout_constraintEnd_toStartOf="@id/btnStop"
+            app:layout_constraintStart_toEndOf="@id/btnPlay"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="529dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@color/red"
+            android:text="stop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnPause"
+            app:layout_constraintTop_toBottomOf="@id/guideline" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -19,6 +62,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/navigation_drawer" />
+
+
+
+
 </androidx.drawerlayout.widget.DrawerLayout>
 
 

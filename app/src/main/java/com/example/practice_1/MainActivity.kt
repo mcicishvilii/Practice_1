@@ -1,5 +1,6 @@
 package com.example.practice_1
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import com.example.practice_1.databinding.ActivityMainBinding
 import com.example.practice_1.fragments.LessonOneFragment
 import com.example.practice_1.fragments.LessonThreeFragment
 import com.example.practice_1.fragments.LessonTwoFragment
+import com.example.practice_1.services.MusicService
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -18,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var drawerLayout: DrawerLayout
     lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-
+    private var isServiceRunning = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         actionBarDrawerToggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         binding.myNavigationView.setNavigationItemSelectedListener {
 
@@ -49,11 +52,23 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+
+        binding.btnPlay.setOnClickListener {
+            Intent(this,MusicService::class.java).also{
+                startService(it)
+            }
+        }
+        binding.btnStop.setOnClickListener {
+            Intent(this,MusicService::class.java).also{
+                stopService(it)
+            }
+        }
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-
             true
         } else super.onOptionsItemSelected(item)
     }
