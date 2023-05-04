@@ -53,16 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        binding.btnPlay.setOnClickListener {
-            Intent(this,MusicService::class.java).also{
-                startService(it)
-            }
-        }
-        binding.btnStop.setOnClickListener {
-            Intent(this,MusicService::class.java).also{
-                stopService(it)
-            }
-        }
+
 
 
     }

@@ -26,6 +26,7 @@
             android:layout_margin="15dp"
             android:background="#4CAF50"
             android:text="play"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/btnPause"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guideline" />
@@ -35,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
+            android:visibility="gone"
             android:background="#FFEB3B"
             android:text="pause"
             app:layout_constraintEnd_toStartOf="@id/btnStop"
@@ -47,6 +49,7 @@
             android:id="@+id/btnStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_margin="15dp"
             android:background="@color/red"
             android:text="stop"
