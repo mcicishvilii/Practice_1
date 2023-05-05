@@ -51,7 +51,6 @@ class ItemsAdapter : ListAdapter<Items, RecyclerView.ViewHolder>(ItemsDiffCallba
                 }
             }
         }
-
     }
 
     inner class WithoutImageViewHolder(private val binding: ItemWithoutImageBinding) :
