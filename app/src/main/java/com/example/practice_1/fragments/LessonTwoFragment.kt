@@ -9,8 +9,11 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.practice_1.MusicDatabaseHelper
 import com.example.practice_1.R
+import com.example.practice_1.adapters.ItemsAdapter
+import com.example.practice_1.adapters.SongsAdapter
 import com.example.practice_1.common.BaseFragment
 import com.example.practice_1.data.Song
 import com.example.practice_1.databinding.FragmentLessonTwoBinding
@@ -19,10 +22,13 @@ import com.example.practice_1.services.MusicService
 class LessonTwoFragment :
     BaseFragment<FragmentLessonTwoBinding>(FragmentLessonTwoBinding::inflate) {
 
-
+    private val songsAdapter: SongsAdapter by lazy { SongsAdapter() }
+    val songsList = mutableListOf<Song>()
 
     private lateinit var musicDatabaseHelper: MusicDatabaseHelper
     private lateinit var db: SQLiteDatabase
+
+    var path:String = ""
     override fun onAttach(context: Context) {
         super.onAttach(context)
         musicDatabaseHelper = MusicDatabaseHelper(context)
@@ -31,17 +37,26 @@ class LessonTwoFragment :
     @SuppressLint("Range")
     override fun viewCreated() {
 
-        val uri = Uri.parse("content://com.example.practice_1.musicprovider/music")
 
+
+        setupRecycler()
+
+        songsAdapter.apply {
+            setOnItemClickListener{song,_ ->
+                path = song.song.toString()
+                Log.d("GESTAPO",path.toString())
+            }
+        }
+        val uriString = "android.resource://${requireContext().packageName}/${R.raw.sampl}"
+        val uri = Uri.parse(uriString)
         val values = ContentValues().apply {
             put(MusicDatabaseHelper.COLUMN_TITLE, "Californication")
             put(MusicDatabaseHelper.COLUMN_ARTIST, "rhcp")
-            put(MusicDatabaseHelper.COLUMN_GENRE, "alternative")
-            put(MusicDatabaseHelper.COLUMN_PATH, "raw/rhcp.mp4")
+            put(MusicDatabaseHelper.COLUMN_GENRE, "sampli kide axali")
+            put(MusicDatabaseHelper.COLUMN_PATH, R.raw.sampl) // <-- Insert the raw resource ID
         }
 
         db.insert(MusicDatabaseHelper.TABLE_NAME, null, values)
-
 
         val projection = arrayOf(
             MusicDatabaseHelper.COLUMN_TITLE,
@@ -66,13 +81,13 @@ class LessonTwoFragment :
             val title = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_TITLE))
             val artist = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_ARTIST))
             val genre = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_GENRE))
-            val path = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_PATH))
-            Log.d("Song", "$title - $artist - $genre - $path")
+            val path = cursor.getInt(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_PATH))
+            songsList.add(Song(path,title,genre,artist))
+            songsAdapter.apply {
+                submitList(songsList)
+            }
         }
-
         cursor.close()
-
-
 
 
     }
@@ -85,8 +100,14 @@ class LessonTwoFragment :
 
     private fun play() {
         binding.btnPlay.setOnClickListener {
-            val intent = Intent(requireContext(), MusicService::class.java)
-            intent.action = MusicService.ACTION_PLAY
+//            val intent = Intent(requireContext(), MusicService::class.java)
+//            intent.action = MusicService.ACTION_PLAY
+//            requireActivity().startService(intent)
+
+            val intent = Intent(requireContext(), MusicService::class.java).apply {
+                action = MusicService.ACTION_PLAY
+                putExtra(MusicService.EXTRA_PATH, path)
+            }
             requireActivity().startService(intent)
         }
     }
@@ -95,6 +116,7 @@ class LessonTwoFragment :
             val intent = Intent(requireContext(), MusicService::class.java)
             intent.action = MusicService.ACTION_STOP
             requireActivity().startService(intent)
+
         }
     }
     private fun pause(){
@@ -102,6 +124,18 @@ class LessonTwoFragment :
             val intent = Intent(requireContext(), MusicService::class.java)
             intent.action = MusicService.ACTION_PAUSE
             requireActivity().startService(intent)
+        }
+    }
+
+    private fun setupRecycler() {
+        binding.rvSongs.apply {
+            adapter = songsAdapter
+            layoutManager =
+                LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
         }
     }
 

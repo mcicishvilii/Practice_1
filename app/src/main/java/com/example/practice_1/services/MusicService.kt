@@ -10,7 +10,6 @@ import android.widget.Toast
 import com.example.practice_1.R
 
 
-
 class MusicService : Service() {
 
     private lateinit var mediaPlayer: MediaPlayer
@@ -20,6 +19,7 @@ class MusicService : Service() {
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
+
 
     override fun onCreate() {
         super.onCreate()
@@ -37,6 +37,9 @@ class MusicService : Service() {
                     mediaPlayer.start()
                     isPaused = false
                 } else {
+                    val path = intent.getStringExtra(EXTRA_PATH)
+                    mediaPlayer.setDataSource(path)
+                    mediaPlayer.prepare()
                     mediaPlayer.start()
                 }
             }
@@ -62,6 +65,7 @@ class MusicService : Service() {
         const val ACTION_PLAY = "PLAY"
         const val ACTION_PAUSE = "PAUSE"
         const val ACTION_STOP = "STOP"
+        const val EXTRA_PATH = "PATH"
     }
 }
 
