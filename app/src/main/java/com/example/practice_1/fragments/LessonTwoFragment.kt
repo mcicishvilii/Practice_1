@@ -28,7 +28,8 @@ class LessonTwoFragment :
     private lateinit var musicDatabaseHelper: MusicDatabaseHelper
     private lateinit var db: SQLiteDatabase
 
-    var path:String = ""
+//    private var path: String? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         musicDatabaseHelper = MusicDatabaseHelper(context)
@@ -43,17 +44,17 @@ class LessonTwoFragment :
 
         songsAdapter.apply {
             setOnItemClickListener{song,_ ->
-                path = song.song.toString()
-                Log.d("GESTAPO",path.toString())
+                Log.d("GESTAPO",song.song.toString())
             }
         }
-        val uriString = "android.resource://${requireContext().packageName}/${R.raw.sampl}"
-        val uri = Uri.parse(uriString)
+//        val uriString = "android.resource://${requireContext().packageName}/${R.raw.sampl}"
+//        val uri = Uri.parse(uriString)
+
         val values = ContentValues().apply {
             put(MusicDatabaseHelper.COLUMN_TITLE, "Californication")
             put(MusicDatabaseHelper.COLUMN_ARTIST, "rhcp")
             put(MusicDatabaseHelper.COLUMN_GENRE, "sampli kide axali")
-            put(MusicDatabaseHelper.COLUMN_PATH, R.raw.sampl) // <-- Insert the raw resource ID
+            put(MusicDatabaseHelper.COLUMN_PATH, R.raw.rhcp1)
         }
 
         db.insert(MusicDatabaseHelper.TABLE_NAME, null, values)
@@ -100,15 +101,15 @@ class LessonTwoFragment :
 
     private fun play() {
         binding.btnPlay.setOnClickListener {
-//            val intent = Intent(requireContext(), MusicService::class.java)
-//            intent.action = MusicService.ACTION_PLAY
-//            requireActivity().startService(intent)
-
-            val intent = Intent(requireContext(), MusicService::class.java).apply {
-                action = MusicService.ACTION_PLAY
-                putExtra(MusicService.EXTRA_PATH, path)
-            }
+            val intent = Intent(requireContext(), MusicService::class.java)
+            intent.action = MusicService.ACTION_PLAY
             requireActivity().startService(intent)
+
+//            val intent = Intent(requireContext(), MusicService::class.java).apply {
+//                action = MusicService.ACTION_PLAY
+////                putExtra(MusicService.EXTRA_PATH, path?: "")
+//            }
+//            requireActivity().startService(intent)
         }
     }
     private fun stop() {

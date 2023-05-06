@@ -20,10 +20,9 @@ class MusicService : Service() {
         return null
     }
 
-
     override fun onCreate() {
         super.onCreate()
-        mediaPlayer = MediaPlayer.create(this, R.raw.rhcp)
+        mediaPlayer = MediaPlayer.create(this, R.raw.sampl)
         mediaPlayer.setOnCompletionListener {
             stopSelf()
         }
@@ -37,9 +36,6 @@ class MusicService : Service() {
                     mediaPlayer.start()
                     isPaused = false
                 } else {
-                    val path = intent.getStringExtra(EXTRA_PATH)
-                    mediaPlayer.setDataSource(path)
-                    mediaPlayer.prepare()
                     mediaPlayer.start()
                 }
             }
@@ -65,7 +61,7 @@ class MusicService : Service() {
         const val ACTION_PLAY = "PLAY"
         const val ACTION_PAUSE = "PAUSE"
         const val ACTION_STOP = "STOP"
-        const val EXTRA_PATH = "PATH"
     }
 }
+
 
