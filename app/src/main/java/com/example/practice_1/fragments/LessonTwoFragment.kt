@@ -28,7 +28,7 @@ class LessonTwoFragment :
     private lateinit var musicDatabaseHelper: MusicDatabaseHelper
     private lateinit var db: SQLiteDatabase
 
-//    private var path: String? = null
+    private var path: String? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,6 +45,7 @@ class LessonTwoFragment :
         songsAdapter.apply {
             setOnItemClickListener{song,_ ->
                 Log.d("GESTAPO",song.song.toString())
+//                path = song.song.toString()
             }
         }
 //        val uriString = "android.resource://${requireContext().packageName}/${R.raw.sampl}"
@@ -89,8 +90,6 @@ class LessonTwoFragment :
             }
         }
         cursor.close()
-
-
     }
 
     override fun listeners() {
@@ -107,7 +106,7 @@ class LessonTwoFragment :
 
 //            val intent = Intent(requireContext(), MusicService::class.java).apply {
 //                action = MusicService.ACTION_PLAY
-////                putExtra(MusicService.EXTRA_PATH, path?: "")
+//                putExtra(MusicService.EXTRA_PATH, path?: "")
 //            }
 //            requireActivity().startService(intent)
         }
