@@ -1,15 +1,15 @@
 package com.example.practice_1.fragments
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
+import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.IBinder
+import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
+import com.example.practice_1.MusicDatabaseHelper
 import com.example.practice_1.R
 import com.example.practice_1.common.BaseFragment
 import com.example.practice_1.data.Song
@@ -19,27 +19,58 @@ import com.example.practice_1.services.MusicService
 class LessonTwoFragment :
     BaseFragment<FragmentLessonTwoBinding>(FragmentLessonTwoBinding::inflate) {
 
-    private lateinit var songsUri: Uri
-    private lateinit var songsList: MutableList<String>
 
+
+    private lateinit var musicDatabaseHelper: MusicDatabaseHelper
+    private lateinit var db: SQLiteDatabase
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        musicDatabaseHelper = MusicDatabaseHelper(context)
+        db = musicDatabaseHelper.writableDatabase
+    }
     @SuppressLint("Range")
     override fun viewCreated() {
 
-        songsUri = Uri.parse("content://com.demo.user.provider/users")
+        val uri = Uri.parse("content://com.example.practice_1.musicprovider/music")
 
-        // Initialize songsList as an empty MutableList
-        songsList = mutableListOf()
-
-        val cursor = activity?.contentResolver?.query(songsUri, null, null, null, null)
-        cursor?.let {
-            while (it.moveToNext()) {
-                val name = it.getString(it.getColumnIndex("name"))
-                songsList.add(name)
-            }
-            it.close()
+        val values = ContentValues().apply {
+            put(MusicDatabaseHelper.COLUMN_TITLE, "Californication")
+            put(MusicDatabaseHelper.COLUMN_ARTIST, "rhcp")
+            put(MusicDatabaseHelper.COLUMN_GENRE, "alternative")
+            put(MusicDatabaseHelper.COLUMN_PATH, "raw/rhcp.mp4")
         }
 
-        binding.tvGenre.text = songsList.size.toString()
+        db.insert(MusicDatabaseHelper.TABLE_NAME, null, values)
+
+
+        val projection = arrayOf(
+            MusicDatabaseHelper.COLUMN_TITLE,
+            MusicDatabaseHelper.COLUMN_ARTIST,
+            MusicDatabaseHelper.COLUMN_GENRE,
+            MusicDatabaseHelper.COLUMN_PATH
+        )
+
+        val sortOrder = "${MusicDatabaseHelper.COLUMN_TITLE} ASC"
+
+        val cursor = db.query(
+            MusicDatabaseHelper.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            sortOrder
+        )
+
+        while (cursor.moveToNext()) {
+            val title = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_TITLE))
+            val artist = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_ARTIST))
+            val genre = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_GENRE))
+            val path = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_PATH))
+            Log.d("Song", "$title - $artist - $genre - $path")
+        }
+
+        cursor.close()
 
 
 
@@ -72,6 +103,11 @@ class LessonTwoFragment :
             intent.action = MusicService.ACTION_PAUSE
             requireActivity().startService(intent)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        musicDatabaseHelper.close()
     }
 
 
