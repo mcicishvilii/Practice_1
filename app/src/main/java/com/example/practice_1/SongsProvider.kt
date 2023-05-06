@@ -7,165 +7,44 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
+import android.provider.MediaStore
 
-class SongsProvider : ContentProvider() {
+class MusicDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+
     companion object {
-        // defining authority so that other application can access it
-        const val PROVIDER_NAME = "com.demo.user.provider"
+        private const val DATABASE_NAME = "music.db"
+        private const val DATABASE_VERSION = 1
 
-        // defining content URI
-        const val URL = "content://$PROVIDER_NAME/users"
+        // Table and columns
+        private const val TABLE_NAME = "music"
+        private const val COLUMN_ID = "_id"
+        private const val COLUMN_TITLE = "title"
+        private const val COLUMN_ARTIST = "artist"
+        private const val COLUMN_GENRE = "genre"
+        private const val COLUMN_PATH = "path"
 
-        // parsing the content URI
-        val CONTENT_URI = Uri.parse(URL)
-        const val id = "id"
-        const val name = "name"
-        const val uriCode = 1
-        var uriMatcher: UriMatcher? = null
-        private val values: HashMap<String, String>? = null
+        // SQL queries
+        const val CREATE_TABLE = "CREATE TABLE $TABLE_NAME " +
+                "($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "$COLUMN_TITLE TEXT NOT NULL, " +
+                "$COLUMN_ARTIST TEXT NOT NULL, " +
+                "$COLUMN_GENRE TEXT NOT NULL, " +
+                "$COLUMN_PATH TEXT NOT NULL);"
 
-        // declaring name of the database
-        const val DATABASE_NAME = "UserDB"
-
-        // declaring table name of the database
-        const val TABLE_NAME = "Users"
-
-        // declaring version of the database
-        const val DATABASE_VERSION = 1
-
-        // sql query to create the table
-        const val CREATE_DB_TABLE =
-            (" CREATE TABLE " + TABLE_NAME
-                    + " (id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + " name TEXT NOT NULL);")
-
-        init {
-
-            // to match the content URI
-            // every time user access table under content provider
-            uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
-
-            // to access whole table
-            uriMatcher!!.addURI(
-                PROVIDER_NAME,
-                "users",
-                uriCode
-            )
-
-            // to access a particular row
-            // of the table
-            uriMatcher!!.addURI(
-                PROVIDER_NAME,
-                "users/*",
-                uriCode
-            )
-        }
+        const val DROP_TABLE = "DROP TABLE IF EXISTS $TABLE_NAME"
     }
 
-    override fun getType(uri: Uri): String? {
-        return when (uriMatcher!!.match(uri)) {
-            uriCode -> "vnd.android.cursor.dir/users"
-            else -> throw IllegalArgumentException("Unsupported URI: $uri")
-        }
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL(CREATE_TABLE)
+        
     }
 
-    // creating the database
-    override fun onCreate(): Boolean {
-        val context = context
-        val dbHelper =
-            DatabaseHelper(context)
-        db = dbHelper.writableDatabase
-        return db != null
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL(DROP_TABLE)
+        onCreate(db)
     }
 
-    override fun query(
-        uri: Uri, projection: Array<String>?, selection: String?,
-        selectionArgs: Array<String>?, sortOrder: String?
-    ): Cursor? {
-        var sortOrder = sortOrder
-        val qb = SQLiteQueryBuilder()
-        qb.tables = TABLE_NAME
-        when (uriMatcher!!.match(uri)) {
-            uriCode -> qb.projectionMap = values
-            else -> throw IllegalArgumentException("Unknown URI $uri")
-        }
-        if (sortOrder == null || sortOrder === "") {
-            sortOrder = id
-        }
-        val c = qb.query(
-            db, projection, selection, selectionArgs, null,
-            null, sortOrder
-        )
-        c.setNotificationUri(context!!.contentResolver, uri)
-        return c
-    }
-
-    // adding data to the database
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        val rowID = db!!.insert(TABLE_NAME, "", values)
-        if (rowID > 0) {
-            val _uri =
-                ContentUris.withAppendedId(CONTENT_URI, rowID)
-            context!!.contentResolver.notifyChange(_uri, null)
-            return _uri
-        }
-        throw SQLiteException("Failed to add a record into $uri")
-    }
-
-    override fun update(
-        uri: Uri, values: ContentValues?, selection: String?,
-        selectionArgs: Array<String>?
-    ): Int {
-        var count = 0
-        count = when (uriMatcher!!.match(uri)) {
-            uriCode -> db!!.update(TABLE_NAME, values, selection, selectionArgs)
-            else -> throw IllegalArgumentException("Unknown URI $uri")
-        }
-        context!!.contentResolver.notifyChange(uri, null)
-        return count
-    }
-
-    override fun delete(
-        uri: Uri,
-        selection: String?,
-        selectionArgs: Array<String>?
-    ): Int {
-        var count = 0
-        count = when (uriMatcher!!.match(uri)) {
-            uriCode -> db!!.delete(TABLE_NAME, selection, selectionArgs)
-            else -> throw IllegalArgumentException("Unknown URI $uri")
-        }
-        context!!.contentResolver.notifyChange(uri, null)
-        return count
-    }
-
-    // creating object of database
-    // to perform query
-    private var db: SQLiteDatabase? = null
-
-    // creating a database
-    private class DatabaseHelper  // defining a constructor
-    internal constructor(context: Context?) : SQLiteOpenHelper(
-        context,
-        DATABASE_NAME,
-        null,
-        DATABASE_VERSION
-    ) {
-        // creating a table in the database
-        override fun onCreate(db: SQLiteDatabase) {
-            db.execSQL(CREATE_DB_TABLE)
-        }
-
-        override fun onUpgrade(
-            db: SQLiteDatabase,
-            oldVersion: Int,
-            newVersion: Int
-        ) {
-
-            // sql query to drop a table
-            // having similar name
-            db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
-            onCreate(db)
-        }
+    override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        onUpgrade(db, oldVersion, newVersion)
     }
 }

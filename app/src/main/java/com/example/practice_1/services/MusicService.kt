@@ -10,30 +10,58 @@ import android.widget.Toast
 import com.example.practice_1.R
 
 
+
 class MusicService : Service() {
 
     private lateinit var mediaPlayer: MediaPlayer
-    val TAG = "Musicservisi"
-    override fun onBind(intent: Intent?): IBinder? = null
+    private var isPaused = false
+    private var currentPosition = 0
 
-    init {
-        Log.d(TAG,"startred")
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
     }
 
     override fun onCreate() {
         super.onCreate()
         mediaPlayer = MediaPlayer.create(this, R.raw.rhcp)
-        mediaPlayer.isLooping = true
+        mediaPlayer.setOnCompletionListener {
+            stopSelf()
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        mediaPlayer.start()
-        return START_STICKY
+        when (intent?.action) {
+            ACTION_PLAY -> {
+                if (isPaused) {
+                    mediaPlayer.seekTo(currentPosition)
+                    mediaPlayer.start()
+                    isPaused = false
+                } else {
+                    mediaPlayer.start()
+                }
+            }
+            ACTION_PAUSE -> {
+                mediaPlayer.pause()
+                isPaused = true
+                currentPosition = mediaPlayer.currentPosition
+            }
+            ACTION_STOP -> {
+                mediaPlayer.stop()
+                stopSelf()
+            }
+        }
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
-        mediaPlayer.stop()
-        mediaPlayer.release()
         super.onDestroy()
+        mediaPlayer.release()
+    }
+
+    companion object {
+        const val ACTION_PLAY = "PLAY"
+        const val ACTION_PAUSE = "PAUSE"
+        const val ACTION_STOP = "STOP"
     }
 }
+

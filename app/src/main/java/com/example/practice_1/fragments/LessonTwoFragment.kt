@@ -49,20 +49,28 @@ class LessonTwoFragment :
     override fun listeners() {
         play()
         stop()
+        pause()
     }
 
     private fun play() {
         binding.btnPlay.setOnClickListener {
-            Intent(requireContext(), MusicService::class.java).also {
-                requireActivity().startService(it)
-            }
+            val intent = Intent(requireContext(), MusicService::class.java)
+            intent.action = MusicService.ACTION_PLAY
+            requireActivity().startService(intent)
         }
     }
-    private fun stop(){
+    private fun stop() {
         binding.btnStop.setOnClickListener{
-            Intent(requireContext(), MusicService::class.java).also {
-                requireActivity().stopService(it)
-            }
+            val intent = Intent(requireContext(), MusicService::class.java)
+            intent.action = MusicService.ACTION_STOP
+            requireActivity().startService(intent)
+        }
+    }
+    private fun pause(){
+        binding.btnPause.setOnClickListener{
+            val intent = Intent(requireContext(), MusicService::class.java)
+            intent.action = MusicService.ACTION_PAUSE
+            requireActivity().startService(intent)
         }
     }
 
