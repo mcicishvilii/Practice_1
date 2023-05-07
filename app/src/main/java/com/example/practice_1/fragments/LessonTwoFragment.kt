@@ -3,16 +3,11 @@ package com.example.practice_1.fragments
 import android.annotation.SuppressLint
 import android.content.*
 import android.database.sqlite.SQLiteDatabase
-import android.net.Uri
 import android.os.IBinder
 import android.util.Log
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.practice_1.MusicDatabaseHelper
 import com.example.practice_1.R
-import com.example.practice_1.adapters.ItemsAdapter
 import com.example.practice_1.adapters.SongsAdapter
 import com.example.practice_1.common.BaseFragment
 import com.example.practice_1.data.Song
@@ -74,14 +69,25 @@ class LessonTwoFragment :
             setOnItemClickListener { song, _ ->
                 Log.d("GESTAPO", song.song.toString())
                 path = song.song
+                binding.apply {
+                    tvSongName.text = song.songTitle
+                    tvArtist.text = song.songArtist
+                    tvGenre.text = song.songGenre
+                }
+            }
+
+            setOnDeleteClickListener { song, i ->
+                db.delete(MusicDatabaseHelper.TABLE_NAME,null,null)
             }
         }
 
+
+
         val values = ContentValues().apply {
-            put(MusicDatabaseHelper.COLUMN_TITLE, "Californication")
-            put(MusicDatabaseHelper.COLUMN_ARTIST, "rhcp")
-            put(MusicDatabaseHelper.COLUMN_GENRE, "sampli kide axali")
-            put(MusicDatabaseHelper.COLUMN_PATH, R.raw.rhcp1)
+            put(MusicDatabaseHelper.COLUMN_TITLE, "can i kick it?")
+            put(MusicDatabaseHelper.COLUMN_ARTIST, "tribe called quest")
+            put(MusicDatabaseHelper.COLUMN_GENRE, "rap / hip-hop")
+            put(MusicDatabaseHelper.COLUMN_PATH, R.raw.tribe_called_quest_can_i_kick_it)
         }
 
 //        db.insert(MusicDatabaseHelper.TABLE_NAME, null, values)
@@ -110,6 +116,7 @@ class LessonTwoFragment :
             val artist = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_ARTIST))
             val genre = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_GENRE))
             val path = cursor.getInt(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_PATH))
+
             songsList.add(Song(path, title, genre, artist))
             songsAdapter.apply {
                 submitList(songsList)

@@ -14,6 +14,7 @@ class SongsAdapter :
     ) {
 
     private lateinit var itemClickListener: (Song, Int) -> Unit
+    private lateinit var deleteClickListener: (Song, Int) -> Unit
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
@@ -45,6 +46,10 @@ class SongsAdapter :
                 itemClickListener.invoke(model!!, adapterPosition)
             }
 
+            binding.tvArtist.setOnClickListener {
+                deleteClickListener.invoke(model!!,adapterPosition)
+            }
+
         }
 
 
@@ -53,6 +58,11 @@ class SongsAdapter :
     fun setOnItemClickListener(clickListener: (Song, Int) -> Unit) {
         itemClickListener = clickListener
     }
+
+    fun setOnDeleteClickListener(clickListener: (Song, Int) -> Unit) {
+        deleteClickListener = clickListener
+    }
+
 }
 
 class SongsDiffCallBack :
