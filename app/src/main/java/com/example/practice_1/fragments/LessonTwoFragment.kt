@@ -28,28 +28,54 @@ class LessonTwoFragment :
     private lateinit var musicDatabaseHelper: MusicDatabaseHelper
     private lateinit var db: SQLiteDatabase
 
-    private var path: String? = null
+    private var path: Int? = null
+
+    private lateinit var musicService: MusicService
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+            val binder = p1 as MusicService.MusicServiceBinder
+            musicService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
+
+        }
+
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         musicDatabaseHelper = MusicDatabaseHelper(context)
         db = musicDatabaseHelper.writableDatabase
+
+
     }
+
+    override fun onStart() {
+        super.onStart()
+        Intent(requireContext(), MusicService::class.java).also {
+            requireActivity().bindService(it, connection, Context.BIND_AUTO_CREATE)
+            requireActivity().startService(it)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().unbindService(connection)
+    }
+
     @SuppressLint("Range")
     override fun viewCreated() {
-
 
 
         setupRecycler()
 
         songsAdapter.apply {
-            setOnItemClickListener{song,_ ->
-                Log.d("GESTAPO",song.song.toString())
-//                path = song.song.toString()
+            setOnItemClickListener { song, _ ->
+                Log.d("GESTAPO", song.song.toString())
+                path = song.song
             }
         }
-//        val uriString = "android.resource://${requireContext().packageName}/${R.raw.sampl}"
-//        val uri = Uri.parse(uriString)
 
         val values = ContentValues().apply {
             put(MusicDatabaseHelper.COLUMN_TITLE, "Californication")
@@ -58,7 +84,7 @@ class LessonTwoFragment :
             put(MusicDatabaseHelper.COLUMN_PATH, R.raw.rhcp1)
         }
 
-        db.insert(MusicDatabaseHelper.TABLE_NAME, null, values)
+//        db.insert(MusicDatabaseHelper.TABLE_NAME, null, values)
 
         val projection = arrayOf(
             MusicDatabaseHelper.COLUMN_TITLE,
@@ -84,7 +110,7 @@ class LessonTwoFragment :
             val artist = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_ARTIST))
             val genre = cursor.getString(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_GENRE))
             val path = cursor.getInt(cursor.getColumnIndexOrThrow(MusicDatabaseHelper.COLUMN_PATH))
-            songsList.add(Song(path,title,genre,artist))
+            songsList.add(Song(path, title, genre, artist))
             songsAdapter.apply {
                 submitList(songsList)
             }
@@ -100,30 +126,25 @@ class LessonTwoFragment :
 
     private fun play() {
         binding.btnPlay.setOnClickListener {
-            val intent = Intent(requireContext(), MusicService::class.java)
-            intent.action = MusicService.ACTION_PLAY
-            requireActivity().startService(intent)
-
-//            val intent = Intent(requireContext(), MusicService::class.java).apply {
-//                action = MusicService.ACTION_PLAY
-//                putExtra(MusicService.EXTRA_PATH, path?: "")
-//            }
-//            requireActivity().startService(intent)
+            if (::musicService.isInitialized) {
+                musicService.playMusic(path!!)
+            }
         }
     }
+
     private fun stop() {
-        binding.btnStop.setOnClickListener{
-            val intent = Intent(requireContext(), MusicService::class.java)
-            intent.action = MusicService.ACTION_STOP
-            requireActivity().startService(intent)
-
+        binding.btnStop.setOnClickListener {
+            if (::musicService.isInitialized) {
+                musicService.stopMusic()
+            }
         }
     }
-    private fun pause(){
-        binding.btnPause.setOnClickListener{
-            val intent = Intent(requireContext(), MusicService::class.java)
-            intent.action = MusicService.ACTION_PAUSE
-            requireActivity().startService(intent)
+
+    private fun pause() {
+        binding.btnPause.setOnClickListener {
+            if (::musicService.isInitialized) {
+                musicService.pauseMusic()
+            }
         }
     }
 
@@ -143,7 +164,6 @@ class LessonTwoFragment :
         super.onDestroy()
         musicDatabaseHelper.close()
     }
-
 
 
 }

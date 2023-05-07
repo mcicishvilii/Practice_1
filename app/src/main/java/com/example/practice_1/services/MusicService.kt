@@ -15,40 +15,53 @@ class MusicService : Service() {
     private lateinit var mediaPlayer: MediaPlayer
     private var isPaused = false
     private var currentPosition = 0
-
+    private val binder = MusicServiceBinder()
     override fun onBind(intent: Intent?): IBinder? {
-        return null
+        return binder
+    }
+    inner class MusicServiceBinder : Binder(){
+        fun getService() = this@MusicService
     }
 
     override fun onCreate() {
         super.onCreate()
-        mediaPlayer = MediaPlayer.create(this, R.raw.sampl)
+        mediaPlayer = MediaPlayer()
         mediaPlayer.setOnCompletionListener {
             stopSelf()
         }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action) {
-            ACTION_PLAY -> {
-                if (isPaused) {
-                    mediaPlayer.seekTo(currentPosition)
-                    mediaPlayer.start()
-                    isPaused = false
-                } else {
-                    mediaPlayer.start()
-                }
-            }
-            ACTION_PAUSE -> {
-                mediaPlayer.pause()
-                isPaused = true
-                currentPosition = mediaPlayer.currentPosition
-            }
-            ACTION_STOP -> {
-                mediaPlayer.stop()
-                stopSelf()
-            }
+    fun playMusic(ab: Int) {
+        if (!isPaused) {
+            mediaPlayer.reset()
+            mediaPlayer = MediaPlayer.create(this, ab)
+            mediaPlayer.start()
+        } else {
+            mediaPlayer.start()
+            isPaused = false
         }
+    }
+
+    fun stopMusic() {
+        if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+            isPaused = false
+            currentPosition = 0
+        }
+    }
+
+    fun pauseMusic() {
+        if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            isPaused = true
+            currentPosition = mediaPlayer.currentPosition
+        }
+    }
+
+
+
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_NOT_STICKY
     }
 
@@ -57,11 +70,6 @@ class MusicService : Service() {
         mediaPlayer.release()
     }
 
-    companion object {
-        const val ACTION_PLAY = "PLAY"
-        const val ACTION_PAUSE = "PAUSE"
-        const val ACTION_STOP = "STOP"
-    }
 }
 
 
