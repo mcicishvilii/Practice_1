@@ -84,10 +84,10 @@ class LessonTwoFragment :
 
 
         val values = ContentValues().apply {
-            put(MusicDatabaseHelper.COLUMN_TITLE, "can i kick it?")
-            put(MusicDatabaseHelper.COLUMN_ARTIST, "tribe called quest")
-            put(MusicDatabaseHelper.COLUMN_GENRE, "rap / hip-hop")
-            put(MusicDatabaseHelper.COLUMN_PATH, R.raw.tribe_called_quest_can_i_kick_it)
+            put(MusicDatabaseHelper.COLUMN_TITLE, "Otherside")
+            put(MusicDatabaseHelper.COLUMN_ARTIST, "rhcp")
+            put(MusicDatabaseHelper.COLUMN_GENRE, "alternative rock")
+            put(MusicDatabaseHelper.COLUMN_PATH, R.raw.red_hot_chili_peppers_otherside_official_music_)
         }
 
 //        db.insert(MusicDatabaseHelper.TABLE_NAME, null, values)

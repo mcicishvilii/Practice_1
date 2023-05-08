@@ -6,15 +6,74 @@
     android:layout_height="match_parent"
     tools:context=".fragments.lesson_1_fragments.TextWatcherFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/midGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvArtistColumn"
+        />
+
+    <TextView
+        android:id="@+id/tvSongNameColumn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Song Name"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@id/startGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvGenreColumn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Artist"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@id/midGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="parent"
+
+
+        />
+
+    <TextView
+        android:id="@+id/tvArtistColumn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Genre"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/midGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSongs"
+        android:layout_marginTop="10dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/tvSongName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvGenreColumn" />
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -63,7 +122,6 @@
         android:id="@+id/tvSongName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cant stop"
         android:layout_margin="15dp"
         app:layout_constraintBottom_toTopOf="@+id/tvArtist"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +131,6 @@
         android:id="@+id/tvArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Red Hot Chilli Peppers"
         android:layout_margin="15dp"
         app:layout_constraintBottom_toTopOf="@+id/tvGenre"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +140,6 @@
         android:id="@+id/tvGenre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Alternative rock"
         android:layout_margin="15dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
