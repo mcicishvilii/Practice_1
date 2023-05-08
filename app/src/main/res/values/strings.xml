@@ -9,4 +9,19 @@
     <string name="okay">Okay!</string>
     <string name="nav_open">open!</string>
     <string name="nav_closed">closed!</string>
+
+    <string-array name="genre">
+        <item>R&amp;B</item>
+        <item>Alternative ROck</item>
+        <item>Rap / Hip-Hop</item>
+        <item>All</item>
+    </string-array>
+
+    <string-array name="artist">
+        <item>Jamiroquai</item>
+        <item>Tribe Called Quest</item>
+        <item>RHCP</item>
+        <item>All</item>
+    </string-array>
+
 </resources>
